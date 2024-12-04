@@ -20,7 +20,7 @@ export const login_with_github = actionClient.action(async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      redirectTo: `${process.env.WEB_URL}/auth/callback`,
+      redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
     },
   });
 
