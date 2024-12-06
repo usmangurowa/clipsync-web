@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@/supabase/server";
-import { auth_schema, email_schema, profile_schema } from "@/schema";
+import { email_schema, profile_schema } from "@/schema";
 import { redirect } from "next/navigation";
 
 export const getSession = async () => {
@@ -33,20 +33,20 @@ export const login_with_github = actionClient.action(async () => {
   }
 });
 
-export const login_with_password = actionClient
-  .schema(auth_schema)
-  .action(async ({ parsedInput: { email, password } }) => {
+export const authenticate = actionClient
+  .schema(email_schema)
+  .action(async ({ parsedInput: { email } }) => {
     const supabase = await createClient();
-    const { error} = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
+      options: { shouldCreateUser: true },
     });
 
     if (error) {
-      throw error
+      throw error;
     }
 
-    return redirect("/clipboard");
+    return redirect("/auth/verify?email=" + email);
   });
 
 export const login_with_email = actionClient
@@ -77,22 +77,17 @@ export const verify_otp = actionClient
     }),
   )
   .action(async ({ parsedInput: { email, otp } }) => {
-    try {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token: otp,
-        type: "email",
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      return data;
-    } catch (error) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: otp,
+      type: "email",
+    });
+    if (error) {
       throw error;
     }
+
+    return redirect("/clipboard");
   });
 
 export const update_profile = actionClient
@@ -105,11 +100,6 @@ export const update_profile = actionClient
         supabase.auth.updateUser({
           data: payload,
         }),
-        // supabase
-        //   .from("profile")
-        //   .upsert({ ...payload, id: session?.user.id })
-        //   .select()
-        //   .throwOnError(),
       ]);
 
       const error = data.find((d) => d.error);
@@ -123,10 +113,7 @@ export const update_profile = actionClient
   });
 
 export const logout = actionClient.action(async () => {
-  try {
-    const supabase = await createClient();
-    await supabase.auth.signOut();
-  } catch (error) {
-    throw error;
-  }
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  return redirect("/auth");
 });

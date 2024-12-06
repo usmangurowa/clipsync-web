@@ -31,7 +31,7 @@ const items = [
 
   {
     title: "Settings",
-    url: "#",
+    url: "/clipboard/settings",
     icon: Settings,
   },
 ];

@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/brand";
 
 import { useAction } from "next-safe-action/hooks";
-import { login_with_password } from "@/actions/auth";
+import { authenticate } from "@/actions/auth";
 
 export default function AuthPage() {
-  const { execute } = useAction(login_with_password, {
+  const { execute, status } = useAction(authenticate, {
     onError: (error) => console.log(error),
   });
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,11 +19,8 @@ export default function AuthPage() {
     const email = (
       event.currentTarget.elements.namedItem("email") as HTMLInputElement
     ).value;
-    const password = (
-      event.currentTarget.elements.namedItem("password") as HTMLInputElement
-    ).value;
-    console.log({ email, password });
-    execute({ email, password });
+
+    execute({ email });
   };
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
@@ -60,17 +57,10 @@ export default function AuthPage() {
                     autoCorrect="off"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Input
-                    id="password"
-                    placeholder="12345"
-                    type="password"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                  />
-                </div>
-                <Button className="w-full">Continue</Button>
+
+                <Button disabled={status === "executing"} className="w-full">
+                  Continue
+                </Button>
               </form>
 
               <div className="relative">
@@ -84,7 +74,12 @@ export default function AuthPage() {
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full" type="button">
+              <Button
+                variant="outline"
+                className="w-full"
+                type="button"
+                disabled={status === "executing"}
+              >
                 <svg
                   className="mr-2 h-4 w-4"
                   aria-hidden="true"
