@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/brand";
 
 import { useAction } from "next-safe-action/hooks";
-import { authenticate } from "@/actions/auth";
+import { authenticate, login_with_github } from "@/actions/auth";
 
 export default function AuthPage() {
+  const { execute: executeGithub } = useAction(login_with_github);
+
   const { execute, status } = useAction(authenticate, {
     onError: (error) => console.log(error),
   });
@@ -75,6 +77,7 @@ export default function AuthPage() {
               </div>
 
               <Button
+                onClick={() => executeGithub()}
                 variant="outline"
                 className="w-full"
                 type="button"
