@@ -32,7 +32,7 @@ export default function VerifyPage(props: PageProps) {
   };
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
-      <div className="hidden border-r md:block">
+      <div className="hidden bg-card md:block">
         <div className="absolute left-4 top-4 md:left-8 md:top-8">
           <Link href="/">
             <Logo />
