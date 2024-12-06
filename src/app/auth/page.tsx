@@ -1,55 +1,55 @@
+"use client";
 
-"use client"
-
-import Link from "next/link"
+import Link from "next/link";
 // import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Logo } from "@/components/brand";
+
+import { useAction } from "next-safe-action/hooks";
+import { login_with_password } from "@/actions/auth";
 
 export default function AuthPage() {
+  const { execute } = useAction(login_with_password, {
+    onError: (error) => console.log(error),
+  });
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const email = (
+      event.currentTarget.elements.namedItem("email") as HTMLInputElement
+    ).value;
+    const password = (
+      event.currentTarget.elements.namedItem("password") as HTMLInputElement
+    ).value;
+    console.log({ email, password });
+    execute({ email, password });
+  };
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
-      {/* Left section*/}
       <div className="hidden bg-black md:block">
         <div className="absolute left-4 top-4 md:left-8 md:top-8">
-          <Link
-            href="/"
-            className="flex items-center space-x-2 text-lg font-semibold"
-          >
-            <span>Clip Sync</span>
+          <Link href="/">
+            <Logo />
           </Link>
         </div>
       </div>
 
       {/* Right section - form */}
-      <div className="relative flex flex-col ">
-        <div className="block md:hidden absolute left-4 top-4 md:left-8 md:top-8">
-          <Link
-            href="/"
-            className="flex items-center space-x-2 text-lg font-semibold"
-          >
-            <span>Clip Sync</span>
-          </Link>
-        </div>
-        <div className="absolute right-4 top-3 md:right-8 md:top-6">
-          <Button variant="ghost" asChild>
-            <Link href="/login" className="text-lg">Login</Link>
-          </Button>
-        </div>
-
-        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 md:mt-28">
+      <div className="relative flex flex-col">
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 md:mt-28 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm">
             <div className="space-y-6">
               <div className="space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">
-                  Create an account
+                  Clip Sync
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  Enter your email below to create your account
+                  Enter an email and password to continue.
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Input
                     id="email"
@@ -60,10 +60,18 @@ export default function AuthPage() {
                     autoCorrect="off"
                   />
                 </div>
-                <Button className="w-full">
-                  Sign in with Email
-                </Button>
-              </div>
+                <div className="space-y-2">
+                  <Input
+                    id="password"
+                    placeholder="12345"
+                    type="password"
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    autoCorrect="off"
+                  />
+                </div>
+                <Button className="w-full">Continue</Button>
+              </form>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -103,13 +111,11 @@ export default function AuthPage() {
                 >
                   Privacy Policy
                 </Link>
-
               </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

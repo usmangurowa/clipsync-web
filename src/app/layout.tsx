@@ -8,12 +8,12 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MadiDiary",
-  description: "MadiDiary Dashboard"
+  title: "Clip Sync",
+  description: "Clip Sync",
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {

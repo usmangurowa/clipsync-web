@@ -10,14 +10,17 @@
     "db:generate": "npx supabase gen types --lang=typescript --project-id mquvgyqvmblcaogecqqn --schema public > src/supabase/db-types.ts"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-scroll-area": "^1.2.1",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tooltip": "^1.1.4",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.465.0",
+    "iconsax-react": "^0.0.8",
+    "lucide-react": "^0.468.0",
     "next": "15.0.3",
     "next-safe-action": "^7.9.9",
     "next-themes": "^0.4.3",

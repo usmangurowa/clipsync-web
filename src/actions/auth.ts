@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@/supabase/server";
-import { login_schema, profile_schema } from "@/schema";
+import { auth_schema, email_schema, profile_schema } from "@/schema";
 import { redirect } from "next/navigation";
 
 export const getSession = async () => {
@@ -33,8 +33,24 @@ export const login_with_github = actionClient.action(async () => {
   }
 });
 
+export const login_with_password = actionClient
+  .schema(auth_schema)
+  .action(async ({ parsedInput: { email, password } }) => {
+    const supabase = await createClient();
+    const { error} = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw error
+    }
+
+    return redirect("/clipboard");
+  });
+
 export const login_with_email = actionClient
-  .schema(login_schema)
+  .schema(email_schema)
   .action(async ({ parsedInput: { email } }) => {
     try {
       const supabase = await createClient();
@@ -57,7 +73,7 @@ export const verify_otp = actionClient
   .schema(
     z.object({
       otp: z.string().length(6),
-      ...login_schema.shape,
+      ...email_schema.shape,
     }),
   )
   .action(async ({ parsedInput: { email, otp } }) => {

@@ -14,6 +14,12 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
+
+
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
+
   // Authenticated user with name trying to access /auth
   if (
     session &&
@@ -37,13 +43,13 @@ export async function middleware(request: NextRequest) {
   }
 
   // Authenticated without full_name and trying to access other pages
-  if (
-    session &&
-    !session?.user?.user_metadata?.full_name &&
-    pathname !== "/auth/setup"
-  ) {
-    return NextResponse.redirect(`${newUrl.origin}/auth/setup`);
-  }
+  // if (
+  //   session &&
+  //   !session?.user?.user_metadata?.full_name &&
+  //   pathname !== "/auth/setup"
+  // ) {
+  //   return NextResponse.redirect(`${newUrl.origin}/auth/setup`);
+  // }
 
   return NextResponse.next();
 }
@@ -58,5 +64,6 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/",
   ],
 };
