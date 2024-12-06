@@ -15,17 +15,17 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useSearchParams } from "next/navigation";
+
 import React from "react";
 
-export default function VerifyPage() {
+export default function VerifyPage(props: PageProps) {
   const { execute } = useAction(verify_otp, {
     onError: (error) => console.log(error),
   });
 
-  const searchParams = useSearchParams();
   const [otp, setOtp] = React.useState<string>("");
-  const email = searchParams.get("email") as string;
+
+  const { email } = React.use(props.searchParams) as { email: string };
 
   const handleVerify = () => {
     execute({ email, otp });
