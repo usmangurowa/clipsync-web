@@ -13,10 +13,6 @@ const getClips = async () => {
   return data;
 };
 
-const useClips = () => {
-  const { data, ...rest } = useSWR("clips", getClips);
-
-  return { data, ...rest };
-};
+const useClips = () => useSWR("clips", getClips);
 
 export { useClips };
