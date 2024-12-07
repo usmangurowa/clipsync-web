@@ -16,3 +16,13 @@ export const getClipboardContent = async () => {
   }
   return "";
 };
+
+export const copyClipboardContent = async (content: string) => {
+  if (typeof window !== "undefined") {
+    try {
+      await navigator.clipboard.writeText(content);
+    } catch (error) {
+      throw error;
+    }
+  }
+};
