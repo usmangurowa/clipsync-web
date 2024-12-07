@@ -1,29 +1,43 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { updateSession } from "./supabase/middleware";
-// import { updateSession } from "./supabase/middleware";
-
-// export async function middleware(request: NextRequest) {
-//   // return await updateSession(request);
-//   return new NextResponse.next(request);
-// }
+import { updateSession } from "@/supabase/middleware";
+import { createClient } from "@/supabase/server";
 
 export async function middleware(request: NextRequest) {
   await updateSession(request);
-  if (request.nextUrl.pathname === "/blocked") {
-    return new NextResponse(null, {
-      status: 403,
-    });
+  const supabase = await createClient();
+
+  const newUrl = new URL("/", request.url);
+  const { pathname } = request.nextUrl;
+
+  if (pathname === "/") {
+    return NextResponse.next();
   }
+
+  const { data } = await supabase.auth.getSession();
+
+  const session = data?.session || null;
+
+  if (session && pathname.startsWith("/auth")) {
+    return NextResponse.redirect(newUrl.origin);
+  }
+
+  if (!session && pathname.startsWith("/clipboard")) {
+    const encodedSearchParams = `${pathname.substring(1)}${newUrl.search}`;
+
+    const url = new URL("/auth", request.url);
+
+    if (encodedSearchParams) {
+      url.searchParams.append("return_to", encodedSearchParams);
+    }
+
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
 }
+
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
