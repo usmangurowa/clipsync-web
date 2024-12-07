@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 // import { updateSession } from "./supabase/middleware";
 
 // export async function middleware(request: NextRequest) {
@@ -6,11 +6,11 @@ import { NextResponse, type NextRequest } from "next/server";
 //   return new NextResponse.next(request);
 // }
 
-export function middleware(request: NextRequest) {
+export function middleware() {
   // if (request.nextUrl.pathname === "/blocked") {
 
   // }
-  return NextResponse.next(request);
+  return new NextResponse();
 }
 
 export const config = {
