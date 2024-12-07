@@ -1,9 +1,16 @@
 "use client";
-import { Calendar, MoonIcon, Settings, SunIcon } from "lucide-react";
+import {
+  Calendar,
+  LogOutIcon,
+  MoonIcon,
+  Settings,
+  SunIcon,
+} from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -14,6 +21,7 @@ import {
 import { Logo } from "./brand";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { logout } from "@/actions/auth";
 
 // Menu items.
 const items = [
@@ -69,6 +77,16 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem onClick={() => logout()} className="cursor-pointer">
+            <SidebarMenuButton>
+              <LogOutIcon />
+              Logout
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
