@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { updateSession } from "./supabase/middleware";
 // import { updateSession } from "./supabase/middleware";
 
 // export async function middleware(request: NextRequest) {
@@ -6,7 +7,8 @@ import { NextResponse, type NextRequest } from "next/server";
 //   return new NextResponse.next(request);
 // }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  await updateSession(request);
   if (request.nextUrl.pathname === "/blocked") {
     return new NextResponse(null, {
       status: 403,
