@@ -1,10 +1,10 @@
 "use client";
 import { Logo } from "@/components/brand";
+import { SwitchThemeButton } from "@/components/switch-theme-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
-import { MoonIcon, SunIcon } from "lucide-react";
-import { useTheme } from "next-themes";
+
 import Link from "next/link";
 import React from "react";
 
@@ -32,10 +32,7 @@ export default Home;
 
 const NavBar = () => {
   const { data, isLoading } = useSession();
-  const { theme, setTheme } = useTheme();
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+
   return (
     <nav className="border-b">
       <div className="container flex w-full items-center justify-between">
@@ -53,13 +50,7 @@ const NavBar = () => {
                   <Link href={"/auth"}>Login</Link>
                 )}
               </Button>
-              <Button
-                variant={"outline"}
-                size={"icon-sm"}
-                onClick={toggleTheme}
-              >
-                {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-              </Button>
+              <SwitchThemeButton />
             </>
           )}
         </div>

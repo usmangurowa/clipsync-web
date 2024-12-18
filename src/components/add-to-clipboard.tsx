@@ -4,12 +4,12 @@ import { Button } from "./ui/button";
 import { PlusIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
-import { getClipboardContent, safeCopyToClipboard } from "@/lib/utils";
+import { cn, getClipboardContent, safeCopyToClipboard } from "@/lib/utils";
 import { useClips } from "@/hooks/use-clips";
 import { createClient } from "@/supabase/client";
 import { toast } from "sonner";
 
-const AddToClipboard = () => {
+const AddToClipboard = ({ className }: { className?: string }) => {
   const { mutate } = useClips();
   const { execute, status } = useAction(addClip, {
     onSuccess: async ({ data }) => {
@@ -53,7 +53,7 @@ const AddToClipboard = () => {
       loading={status === "executing"}
       size={"icon"}
       onClick={handleAddClip}
-      className="fixed bottom-10 right-10 rounded-full"
+      className={cn("fixed bottom-10 right-10 rounded-full", className)}
     >
       <PlusIcon />
     </Button>

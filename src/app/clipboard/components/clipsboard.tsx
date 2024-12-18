@@ -9,7 +9,6 @@ import { toast } from "sonner";
 const ClipsBoard = () => {
   const { data: clips } = useClips();
   return (
-    // <div className="columns-2 md:columns-3 lg:columns-4">
     <div className="before:box-inherit after:box-inherit mx-auto box-border columns-2 gap-5 [column-fill:_balance] md:columns-3 lg:columns-4">
       {clips?.map((clip, index) => (
         <ClipCard clip={clip} index={index} key={clip.id} />
