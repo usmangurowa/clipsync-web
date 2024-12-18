@@ -53,6 +53,7 @@ const AddToClipboard = ({ className }: { className?: string }) => {
       loading={status === "executing"}
       size={"icon"}
       onClick={handleAddClip}
+      variant={"outline"}
       className={cn("fixed bottom-10 right-10 rounded-full", className)}
     >
       <PlusIcon />

@@ -15,7 +15,11 @@ const DockComponent = () => {
           <AddToClipboard className="relative bottom-auto right-auto size-8" />
         </DockIcon>
         <DockIcon>
-          <Button className="size-8 rounded-full" size={"icon"}>
+          <Button
+            variant={"outline"}
+            className="size-8 rounded-full"
+            size={"icon"}
+          >
             <SettingsIcon />
           </Button>
         </DockIcon>
