@@ -15,15 +15,16 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
 
+type ClipboardType = Tables<"clipboard">;
+
 const ClipsBoard = () => {
   const [q] = useQueryState("q", { defaultValue: "" });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const [clip, setClip] = React.useState<Tables<"clipboard"> | null>(null);
+  const [clip, setClip] = React.useState<ClipboardType | null>(null);
   const { data: clips } = useClips({ q });
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
@@ -32,7 +33,7 @@ const ClipsBoard = () => {
     }
   }, []);
 
-  const handleTrigger = React.useCallback((clip: Tables<"clipboard">) => {
+  const handleTrigger = React.useCallback((clip: ClipboardType) => {
     setClip(clip);
     setIsDrawerOpen(true);
   }, []);
@@ -48,62 +49,82 @@ const ClipsBoard = () => {
           />
         ))}
       </div>
-      <Drawer open={isDrawerOpen} onOpenChange={handleOpenChange}>
-        <DrawerContent>
-          <VisuallyHidden.Root>
-            <DrawerHeader hidden>
-              <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-              <DrawerDescription>
-                This action cannot be undone.
-              </DrawerDescription>
-            </DrawerHeader>
-          </VisuallyHidden.Root>
-          <div className="mx-auto w-full md:max-w-2xl">
-            <div className="flex flex-row items-center justify-end gap-2">
-              <Button size={"icon"}>
-                <CopyIcon />
-              </Button>
-              <Button size={"icon"} variant={"destructive"}>
-                <TrashIcon />
-              </Button>
-              <DrawerClose>
-                <Button size={"icon"} variant="outline">
-                  <XIcon />
-                </Button>
-              </DrawerClose>
-            </div>
-            <pre
-              className="overflow-x-auto whitespace-pre-wrap p-5"
-              style={{ wordWrap: "break-word" }}
-            >
-              {clip?.content}
-            </pre>
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <ClipDrawerContent
+        open={isDrawerOpen}
+        onOpenChange={handleOpenChange}
+        clip={clip}
+      />
     </>
   );
 };
 
 export default ClipsBoard;
 
+const handleCopy = async (data: string) => {
+  await copyClipboardContent(data);
+  toast.success("Copied to clipboard");
+};
+
+const ClipDrawerContent = ({
+  open,
+  onOpenChange,
+  clip,
+}: React.ComponentProps<typeof Drawer> & { clip: ClipboardType | null }) => {
+  if (!clip) {
+    return null;
+  }
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        <VisuallyHidden.Root>
+          <DrawerHeader hidden>
+            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+            <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          </DrawerHeader>
+        </VisuallyHidden.Root>
+        <div className="mx-auto w-full md:max-w-2xl">
+          <div className="flex flex-row items-center justify-end gap-2">
+            <Button
+              size={"icon-sm"}
+              variant={"ghost"}
+              onClick={() => handleCopy(clip?.content || "")}
+            >
+              <CopyIcon />
+            </Button>
+            <Button size={"icon-sm"} variant={"destructive"}>
+              <TrashIcon />
+            </Button>
+            <DrawerClose>
+              <Button size={"icon-sm"} variant="outline">
+                <XIcon />
+              </Button>
+            </DrawerClose>
+          </div>
+          <pre
+            className="overflow-x-auto whitespace-pre-wrap p-5"
+            style={{ wordWrap: "break-word" }}
+          >
+            {clip?.content}
+          </pre>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
 const ClipCard = ({
   clip,
   index,
   onTrigger,
 }: {
-  clip: Tables<"clipboard">;
+  clip: ClipboardType;
   index: number;
   onTrigger?: () => void;
 }) => {
-  const handleCopy = async () => {
-    await copyClipboardContent(clip.content || "");
-    toast.success("Copied to clipboard");
-  };
   return (
     <div
       key={clip.id}
-      onClick={handleCopy}
+      onClick={() => clip.content && handleCopy(clip.content || "")}
       className={cn(
         "relative mb-5 cursor-pointer break-inside-avoid overflow-hidden rounded-lg border bg-neutral-50 p-4 transition-all duration-300 ease-in-out hover:border-blue-500 dark:bg-neutral-900",
         {
