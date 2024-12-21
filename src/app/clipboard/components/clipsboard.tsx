@@ -5,9 +5,12 @@ import { cn, copyClipboardContent } from "@/lib/utils";
 import { Tables } from "@/supabase/db-types";
 import React from "react";
 import { toast } from "sonner";
+import { useQueryState } from "nuqs";
 
 const ClipsBoard = () => {
-  const { data: clips } = useClips();
+  const [q] = useQueryState("q", { defaultValue: "" });
+
+  const { data: clips } = useClips({ q });
   return (
     <div className="before:box-inherit after:box-inherit mx-auto box-border columns-2 gap-5 [column-fill:_balance] md:columns-3 lg:columns-4">
       {clips?.map((clip, index) => (
