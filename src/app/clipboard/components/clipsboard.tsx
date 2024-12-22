@@ -18,6 +18,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { useAction } from "next-safe-action/hooks";
+import { deleteClip } from "@/actions/clip";
 
 type ClipboardType = Tables<"clipboard">;
 
@@ -25,7 +27,7 @@ const ClipsBoard = () => {
   const [q] = useQueryState("q", { defaultValue: "" });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [clip, setClip] = React.useState<ClipboardType | null>(null);
-  const { data: clips } = useClips({ q });
+  const { data: clips, mutate } = useClips({ q });
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
     if (!value) {
@@ -53,6 +55,8 @@ const ClipsBoard = () => {
         open={isDrawerOpen}
         onOpenChange={handleOpenChange}
         clip={clip}
+        clips={clips || []}
+        mutate={mutate}
       />
     </>
   );
@@ -69,7 +73,21 @@ const ClipDrawerContent = ({
   open,
   onOpenChange,
   clip,
-}: React.ComponentProps<typeof Drawer> & { clip: ClipboardType | null }) => {
+  clips,
+  mutate,
+}: React.ComponentProps<typeof Drawer> & {
+  clip: ClipboardType | null;
+  clips: ClipboardType[];
+  mutate: (data: ClipboardType[]) => void;
+}) => {
+  const { execute, status } = useAction(deleteClip, {
+    onSuccess: async () => {
+      onOpenChange?.(false);
+      toast.success("Clip deleted");
+      const newClips = clip ? clips.filter((c) => c.id !== clip.id) : clips;
+      mutate(newClips);
+    },
+  });
   if (!clip) {
     return null;
   }
@@ -82,7 +100,7 @@ const ClipDrawerContent = ({
             <DrawerDescription>This action cannot be undone.</DrawerDescription>
           </DrawerHeader>
         </VisuallyHidden.Root>
-        <div className="mx-auto w-full md:max-w-2xl">
+        <div className="mx-auto w-full p-5 md:max-w-2xl">
           <div className="flex flex-row items-center justify-end gap-2">
             <Button
               size={"icon-sm"}
@@ -91,7 +109,12 @@ const ClipDrawerContent = ({
             >
               <CopyIcon />
             </Button>
-            <Button size={"icon-sm"} variant={"destructive"}>
+            <Button
+              onClick={() => execute({ id: clip.id })}
+              loading={status === "executing"}
+              size={"icon-sm"}
+              variant={"destructive"}
+            >
               <TrashIcon />
             </Button>
             <DrawerClose>
@@ -101,7 +124,7 @@ const ClipDrawerContent = ({
             </DrawerClose>
           </div>
           <pre
-            className="overflow-x-auto whitespace-pre-wrap p-5"
+            className="overflow-x-auto whitespace-pre-wrap"
             style={{ wordWrap: "break-word" }}
           >
             {clip?.content}
