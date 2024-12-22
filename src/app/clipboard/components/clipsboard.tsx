@@ -100,7 +100,7 @@ const ClipDrawerContent = ({
             <DrawerDescription>This action cannot be undone.</DrawerDescription>
           </DrawerHeader>
         </VisuallyHidden.Root>
-        <div className="mx-auto w-full p-5 md:max-w-2xl">
+        <div className="mx-auto w-full space-y-5 p-5 md:max-w-2xl">
           <div className="flex flex-row items-center justify-end gap-2">
             <Button
               size={"icon-sm"}
@@ -123,12 +123,14 @@ const ClipDrawerContent = ({
               </Button>
             </DrawerClose>
           </div>
-          <pre
-            className="overflow-x-auto whitespace-pre-wrap"
-            style={{ wordWrap: "break-word" }}
-          >
-            {clip?.content}
-          </pre>
+          <div className="max-h-[80vh] overflow-y-auto">
+            <pre
+              className="overflow-x-auto whitespace-pre-wrap"
+              style={{ wordWrap: "break-word" }}
+            >
+              {clip?.content}
+            </pre>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
