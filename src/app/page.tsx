@@ -6,6 +6,7 @@ import BlurIn from "@/components/ui/blur-in";
 
 import { Button } from "@/components/ui/button";
 import Safari from "@/components/ui/safari";
+import ShimmerButton from "@/components/ui/shimmer-button";
 import { useSession } from "@/hooks/use-session";
 import { ArrowRightIcon } from "lucide-react";
 
@@ -30,9 +31,9 @@ const Home = () => {
           className="text-center !text-base font-normal"
         />
 
-        <Button size={"lg"} asChild>
+        <ShimmerButton className="shadow-2xl dark:text-white">
           <Link href={"/auth"}>Get Started</Link>
-        </Button>
+        </ShimmerButton>
       </main>
       <div className="container relative aspect-video w-full">
         <Safari
