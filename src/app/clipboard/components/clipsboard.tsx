@@ -93,7 +93,7 @@ const ClipDrawerContent = ({
   }
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent>
+      <DrawerContent className="select-text">
         <VisuallyHidden.Root>
           <DrawerHeader hidden>
             <DrawerTitle>Are you absolutely sure?</DrawerTitle>
@@ -123,7 +123,7 @@ const ClipDrawerContent = ({
               </Button>
             </DrawerClose>
           </div>
-          <div className="max-h-[80vh] overflow-y-auto">
+          <div className="max-h-[80vh] cursor-text !select-text overflow-y-auto">
             <pre
               className="overflow-x-auto whitespace-pre-wrap"
               style={{ wordWrap: "break-word" }}
