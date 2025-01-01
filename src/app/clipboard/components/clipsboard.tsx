@@ -7,7 +7,7 @@ import React from "react";
 import { toast } from "sonner";
 import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, Ellipsis, TrashIcon, XIcon } from "lucide-react";
+import { CopyIcon, TrashIcon, XIcon } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -160,17 +160,17 @@ const ClipCard = ({
     >
       <div className="absolute right-0 top-0 flex flex-row">
         <Button
-          size={"icon-xs"}
+          size={"icon-sm"}
           variant={"ghost"}
           onClick={(e) => {
             e.stopPropagation();
-            onTrigger?.();
+            if (clip.content) handleCopy(clip.content || "");
           }}
         >
-          <Ellipsis size={16} />
+          <CopyIcon size={16} className="opacity-50" />
         </Button>
       </div>
-      <p className="line-clamp-6">{clip.content}</p>
+      <p className="mt-2 line-clamp-6">{clip.content}</p>
       <span className="text-sm opacity-40">
         {formatDistanceToNow(new Date(clip.created_at))}
       </span>
