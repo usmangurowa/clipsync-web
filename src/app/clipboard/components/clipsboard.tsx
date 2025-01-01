@@ -9,7 +9,7 @@ import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, Ellipsis, TrashIcon, XIcon } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-
+import { formatDistanceToNow } from "date-fns";
 import {
   Drawer,
   DrawerClose,
@@ -149,7 +149,8 @@ const ClipCard = ({
   return (
     <div
       key={clip.id}
-      onClick={() => clip.content && handleCopy(clip.content || "")}
+      onDoubleClick={() => clip.content && handleCopy(clip.content || "")}
+      onClick={onTrigger}
       className={cn(
         "relative mb-5 cursor-pointer break-inside-avoid overflow-hidden rounded-lg border bg-neutral-50 p-4 transition-all duration-300 ease-in-out hover:border-blue-500 dark:bg-neutral-900",
         {
@@ -170,6 +171,9 @@ const ClipCard = ({
         </Button>
       </div>
       <p className="line-clamp-6">{clip.content}</p>
+      <span className="text-sm opacity-40">
+        {formatDistanceToNow(new Date(clip.created_at))}
+      </span>
     </div>
   );
 };
