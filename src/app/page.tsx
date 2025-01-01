@@ -35,7 +35,11 @@ const Home = () => {
         </Button>
       </main>
       <div className="container relative aspect-video w-full">
-        <Safari url="clipsync.xyz/clipboard" className="size-full" />
+        <Safari
+          url="clipsync.xyz/clipboard"
+          className="size-full"
+          imageSrc="/clipboard-dark.png"
+        />
       </div>
     </>
   );
