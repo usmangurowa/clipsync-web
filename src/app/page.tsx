@@ -5,6 +5,7 @@ import AnimatedShinyText from "@/components/ui/animated-shiny-text";
 import BlurIn from "@/components/ui/blur-in";
 
 import { Button } from "@/components/ui/button";
+import Safari from "@/components/ui/safari";
 import { useSession } from "@/hooks/use-session";
 import { ArrowRightIcon } from "lucide-react";
 
@@ -15,7 +16,7 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <main className="container relative flex h-screen w-screen max-w-3xl flex-col items-center space-y-5 py-10">
+      <main className="container relative flex w-screen max-w-3xl flex-col items-center space-y-5 py-10">
         <AnimatedShinyText className="inline-flex items-center justify-center rounded-full border px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
           <span>✨ Clip Sync</span>
           <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
@@ -33,6 +34,9 @@ const Home = () => {
           <Link href={"/auth"}>Get Started</Link>
         </Button>
       </main>
+      <div className="container relative aspect-video w-full">
+        <Safari url="clipsync.xyz/clipboard" className="size-full" />
+      </div>
     </>
   );
 };
