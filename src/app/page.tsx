@@ -11,6 +11,7 @@ import { useSession } from "@/hooks/use-session";
 import { ArrowRightIcon } from "lucide-react";
 
 import Link from "next/link";
+// import { useRouter } from "next/router";
 import React from "react";
 
 const Home = () => {
@@ -30,10 +31,11 @@ const Home = () => {
           word="One clipboard, all your devices. Copy on your phone, paste on your laptop, and keep your workflow uninterrupted across all your screens. No more emailing yourself text or resharing links"
           className="text-center !text-base font-normal"
         />
-
-        <ShimmerButton className="shadow-2xl dark:text-white">
-          <Link href={"/auth"}>Get Started</Link>
-        </ShimmerButton>
+        <Link href={"/auth"}>
+          <ShimmerButton className="shadow-2xl dark:text-white">
+            Get Started
+          </ShimmerButton>
+        </Link>
       </main>
       <div className="container relative aspect-video w-full">
         <Safari
