@@ -1,3 +1,4 @@
+"use client";
 import { Logo } from "@/components/brand";
 import { SwitchThemeButton } from "@/components/switch-theme-button";
 import { Button } from "@/components/ui/button";
