@@ -19,7 +19,7 @@ import {
 import React from "react";
 
 export default function VerifyPage(props: PageProps) {
-  const { execute } = useAction(verify_otp, {
+  const { execute, status } = useAction(verify_otp, {
     onError: (error) => console.log(error),
   });
 
@@ -76,7 +76,11 @@ export default function VerifyPage(props: PageProps) {
                   </InputOTP>
                 </div>
 
-                <Button onClick={handleVerify} className="w-full">
+                <Button
+                  onClick={handleVerify}
+                  className="w-full"
+                  disabled={status === "executing"}
+                >
                   Verify
                 </Button>
               </div>
