@@ -82,13 +82,7 @@ export default function VerifyPage(props: PageProps) {
               </div>
 
               <p className="px-8 text-center text-sm text-muted-foreground">
-                Go back to{" "}
-                <Link
-                  href="/auth"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  login page
-                </Link>{" "}
+                Go back
               </p>
             </div>
           </div>
