@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { PencilLineIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
-import { cn, getClipboardContent } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { createClient } from "@/supabase/client";
 import { toast } from "sonner";
 import { useClipsStore } from "@/lib/store";
@@ -23,6 +23,7 @@ import { Textarea } from "./ui/textarea";
 
 const WriteToClipboard = ({ className }: { className?: string }) => {
   const { addClip: appendClip } = useClipsStore();
+  const [content, setContent] = React.useState("");
   const { execute, status } = useAction(addClip, {
     onSuccess: async ({ data }) => {
       if (data && data.length) {
@@ -35,14 +36,13 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
     },
   });
 
-  const handleAddClip = async () => {
-    const content = await getClipboardContent();
+  const handleAddClip = React.useCallback(async () => {
     if (content.trim().length) {
       execute({ content });
     } else {
-      toast.info("Clipboard is empty");
+      toast.info("Content is empty");
     }
-  };
+  }, [content, execute]);
 
   React.useEffect(() => {
     const supabase = createClient();
@@ -70,9 +70,7 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          loading={status === "executing"}
           size={"icon"}
-          onClick={handleAddClip}
           variant={"outline"}
           className={cn("fixed bottom-10 right-10 rounded-full", className)}
         >
@@ -84,9 +82,15 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
           <DialogTitle>Write</DialogTitle>
           <DialogDescription>Write content to clipboard</DialogDescription>
         </DialogHeader>
-        <Textarea placeholder="content goes here...."></Textarea>
+        <Textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="content goes here...."
+        ></Textarea>
         <DialogFooter>
-          <Button>Done</Button>
+          <Button onClick={handleAddClip} loading={status === "executing"}>
+            Done
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
