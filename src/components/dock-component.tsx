@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Dock, DockIcon } from "@/components/ui/dock";
-import AddToClipboard from "./add-to-clipboard";
+import PasteToClipboard from "./add-to-clipboard";
 import { Button } from "./ui/button";
 import { LogOutIcon, PencilLineIcon, SettingsIcon } from "lucide-react";
 import { logout } from "@/actions/auth";
@@ -22,7 +22,7 @@ const DockComponent = () => {
       <Dock direction="middle">
         <DockIcon className="relative">
           <ToolTip content="Paste content to clipboard">
-            <AddToClipboard className="relative bottom-auto right-auto size-8" />
+            <PasteToClipboard className="relative bottom-auto right-auto size-8" />
           </ToolTip>
         </DockIcon>
         <DockIcon className="relative">

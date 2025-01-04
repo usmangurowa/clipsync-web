@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useClipsStore } from "@/lib/store";
 import { Tables } from "@/supabase/db-types";
 
-const PasteToClipboard = ({ className }: { className?: string }) => {
+const WriteToClipboard = ({ className }: { className?: string }) => {
   const { addClip: appendClip } = useClipsStore();
   const { execute, status } = useAction(addClip, {
     onSuccess: async ({ data }) => {
@@ -68,4 +68,4 @@ const PasteToClipboard = ({ className }: { className?: string }) => {
   );
 };
 
-export default PasteToClipboard;
+export default WriteToClipboard;
