@@ -11,7 +11,13 @@ interface ClipsStoreType {
 
 export const useClipsStore = create<ClipsStoreType>((set) => ({
   clips: [],
-  addClip: (clip) => set((state) => ({ clips: [clip, ...state.clips] })),
+  addClip: (clip) =>
+    set((state) => {
+      if (!state.clips.find((c) => c.id === clip.id)) {
+        return { clips: [...state.clips, clip] };
+      }
+      return state;
+    }),
   removeAllClips: () => set({ clips: [] }),
   removeClip: (clip) =>
     set((state) => ({
