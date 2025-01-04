@@ -78,9 +78,9 @@ const ClipDrawerContent = ({
 }) => {
   const { removeClip } = useClipsStore();
   const { execute, status } = useAction(deleteClip, {
-    onSuccess: async () => {
-      if (clip) {
-        removeClip(clip);
+    onSuccess: async ({ data }) => {
+      if (data && data.length) {
+        removeClip(data[0]);
       }
       onOpenChange?.(false);
       toast.success("Clip deleted");

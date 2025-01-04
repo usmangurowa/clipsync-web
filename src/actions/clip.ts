@@ -31,7 +31,9 @@ export const deleteClip = actionClient
       const { data, error } = await supabase
         .from("clipboard")
         .delete()
-        .match({ id: parsedInput.id });
+        .match({ id: parsedInput.id })
+        .select()
+        .throwOnError();
       if (error) {
         throw error;
       }
