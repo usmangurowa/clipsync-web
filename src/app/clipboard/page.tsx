@@ -5,11 +5,11 @@ import NavBar from "./components/nav-bar";
 
 const Clipboard = () => {
   return (
-    <main className="relative h-screen flex-grow">
+    <main className="relative flex h-screen flex-grow flex-col">
       <Suspense>
         <NavBar />
       </Suspense>
-      <section className="p-5">
+      <section className="flex-grow p-5">
         <Suspense>
           <ClipsBoard />
         </Suspense>

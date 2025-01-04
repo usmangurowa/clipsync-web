@@ -7,7 +7,7 @@ import React from "react";
 import { toast } from "sonner";
 import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, TrashIcon, XIcon } from "lucide-react";
+import { ClipboardXIcon, CopyIcon, TrashIcon, XIcon } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -77,6 +77,16 @@ const ClipsBoard = () => {
           />
         ))}
       </div>
+      {clips.length === 0 && (
+        <div className="flex h-full w-full flex-col items-center justify-center space-y-5 p-5">
+          <ClipboardXIcon size={64} />
+          <p className="w-full max-w-sm text-center">
+            {q
+              ? "Oh oh!! No Clips found."
+              : "No Clips!! Don't fret, you can add one by clicking on the plus or pencil icon down below."}
+          </p>
+        </div>
+      )}
       <ClipDrawerContent
         open={isDrawerOpen}
         onOpenChange={handleOpenChange}
