@@ -14,7 +14,7 @@ export const useClipsStore = create<ClipsStoreType>((set) => ({
   addClip: (clip) =>
     set((state) => {
       if (!state.clips.find((c) => c.id === clip.id)) {
-        return { clips: [...state.clips, clip] };
+        return { clips: [clip, ...state.clips] };
       }
       return state;
     }),
