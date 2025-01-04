@@ -4,7 +4,7 @@ import React from "react";
 import { Dock, DockIcon } from "@/components/ui/dock";
 import PasteToClipboard from "./paste-to-clipboard";
 import { Button } from "./ui/button";
-import { LogOutIcon, PencilLineIcon, SettingsIcon } from "lucide-react";
+import { LogOutIcon, SettingsIcon } from "lucide-react";
 import { logout } from "@/actions/auth";
 
 import {
@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import WriteToClipboard from "./write-to-clipboard";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -27,16 +28,10 @@ const DockComponent = () => {
         </DockIcon>
         <DockIcon className="relative">
           <ToolTip content="Write content to clipboard">
-            <Button
-              variant={"outline"}
-              className="size-8 rounded-full"
-              size={"icon"}
-            >
-              <PencilLineIcon />
-            </Button>
+            <WriteToClipboard className="relative bottom-auto right-auto size-8" />
           </ToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="relative">
           <ToolTip content="Settings">
             <Button
               variant={"outline"}
