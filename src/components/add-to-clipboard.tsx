@@ -5,16 +5,18 @@ import { PlusIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
 import { cn, getClipboardContent, safeCopyToClipboard } from "@/lib/utils";
-import { useClips } from "@/hooks/use-clips";
+
 import { createClient } from "@/supabase/client";
 import { toast } from "sonner";
+import { useClips } from "@/lib/store";
+import { Tables } from "@/supabase/db-types";
 
 const AddToClipboard = ({ className }: { className?: string }) => {
-  const { mutate } = useClips();
+  const { addClip: appendClip } = useClips();
   const { execute, status } = useAction(addClip, {
     onSuccess: ({ data }) => {
       if (data && data.length) {
-        mutate((prev) => [data[0], ...(prev || [])], { revalidate: false });
+        appendClip(data[0]);
       }
     },
     onError: ({ error }) => {
@@ -38,10 +40,7 @@ const AddToClipboard = ({ className }: { className?: string }) => {
           safeCopyToClipboard(payload.new.content);
           toast.success("Copied to clipboard");
           if (payload.new) {
-            // @ts-expect-error - d
-            mutate((prev) => [payload.new, ...(prev || [])], {
-              revalidate: false,
-            });
+            appendClip(payload.new as Tables<"clipboard">);
           }
         },
       )
@@ -50,7 +49,7 @@ const AddToClipboard = ({ className }: { className?: string }) => {
     return () => {
       taskListener.unsubscribe();
     };
-  }, [mutate]);
+  }, [appendClip]);
 
   return (
     <Button
