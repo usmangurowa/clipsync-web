@@ -12,14 +12,13 @@ import { toast } from "sonner";
 const AddToClipboard = ({ className }: { className?: string }) => {
   const { mutate } = useClips();
   const { execute, status } = useAction(addClip, {
-    onSuccess: async ({ data }) => {
+    onSuccess: ({ data }) => {
       if (data && data.length) {
-        // @ts-expect-error -  d
-        mutate((prev) => [data[0], ...prev], { revalidate: false });
+        mutate((prev) => [data[0], ...(prev || [])], { revalidate: false });
       }
     },
     onError: ({ error }) => {
-      console.log(error);
+      console.log({ error });
     },
   });
 
@@ -38,7 +37,12 @@ const AddToClipboard = ({ className }: { className?: string }) => {
         (payload) => {
           safeCopyToClipboard(payload.new.content);
           toast.success("Copied to clipboard");
-          mutate((prev) => [payload.new, ...prev], { revalidate: false });
+          if (payload.new) {
+            // @ts-expect-error - d
+            mutate((prev) => [payload.new, ...(prev || [])], {
+              revalidate: false,
+            });
+          }
         },
       )
       .subscribe();

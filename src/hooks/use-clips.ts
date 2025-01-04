@@ -8,7 +8,7 @@ type QueryTypes = {
 const getClips = async (query?: QueryTypes) => {
   const supabase = createClient();
   const clipsQuery = supabase.from("clipboard").select("*");
-  console.log(query?.q);
+
   if (query?.q) {
     clipsQuery.ilike("content", `%${query.q}%`);
   }
