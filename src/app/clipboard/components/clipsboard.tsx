@@ -21,6 +21,7 @@ import {
 import { useAction } from "next-safe-action/hooks";
 import { deleteClip } from "@/actions/clip";
 import { useClipsStore } from "@/lib/store";
+import { createClient } from "@/supabase/client";
 
 type ClipboardType = Tables<"clipboard">;
 
@@ -29,7 +30,7 @@ const ClipsBoard = () => {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [clip, setClip] = React.useState<ClipboardType | null>(null);
   useClips({ q });
-  const { clips } = useClipsStore();
+  const { clips, addClip } = useClipsStore();
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
     if (!value) {
@@ -41,6 +42,29 @@ const ClipsBoard = () => {
     setClip(clip);
     setIsDrawerOpen(true);
   }, []);
+
+  React.useEffect(() => {
+    const supabase = createClient();
+    const taskListener = supabase
+      .channel("clipboard")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "clipboard" },
+        (payload) => {
+          // safeCopyToClipboard(payload.new.content);
+          // toast.success("Copied to clipboard");
+          if (payload.new) {
+            addClip(payload.new as Tables<"clipboard">);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      taskListener.unsubscribe();
+    };
+  }, [addClip]);
+
   return (
     <>
       <div className="before:box-inherit after:box-inherit mx-auto box-border columns-2 gap-5 [column-fill:_balance] md:columns-3 lg:columns-4">
