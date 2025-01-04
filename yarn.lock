@@ -3412,6 +3412,11 @@ tapable@^2.2.0:
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
+text-categorizer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/text-categorizer/-/text-categorizer-1.0.0.tgz#193061039d16f96b0434b256102b177c9be1f822"
+  integrity sha512-TKordb7MhcH0lqv/pyhpa5iLm205pSQG4zsLEaQDA6rI6Gwrw1Vpa6YSxZVDbkbkG7k/Msq8kCDO/qm4b651xQ==
+
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz"
