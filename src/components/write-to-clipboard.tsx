@@ -23,10 +23,12 @@ import { Textarea } from "./ui/textarea";
 const WriteToClipboard = ({ className }: { className?: string }) => {
   const { addClip: appendClip } = useClipsStore();
   const [content, setContent] = React.useState("");
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const { execute, status } = useAction(addClip, {
     onSuccess: async ({ data }) => {
       if (data && data.length) {
         appendClip(data[0]);
+        setIsDialogOpen(false);
         toast.success("Content added to clipboard");
       }
     },
@@ -44,7 +46,7 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
   }, [content, execute]);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button
           size={"icon"}
