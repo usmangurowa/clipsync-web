@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Dock, DockIcon } from "@/components/ui/dock";
-import PasteToClipboard from "./add-to-clipboard";
+import PasteToClipboard from "./paste-to-clipboard";
 import { Button } from "./ui/button";
 import { LogOutIcon, PencilLineIcon, SettingsIcon } from "lucide-react";
 import { logout } from "@/actions/auth";

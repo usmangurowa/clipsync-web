@@ -10,6 +10,17 @@ import { toast } from "sonner";
 import { useClipsStore } from "@/lib/store";
 import { Tables } from "@/supabase/db-types";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "./ui/textarea";
+
 const WriteToClipboard = ({ className }: { className?: string }) => {
   const { addClip: appendClip } = useClipsStore();
   const { execute, status } = useAction(addClip, {
@@ -56,15 +67,29 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
   }, [appendClip]);
 
   return (
-    <Button
-      loading={status === "executing"}
-      size={"icon"}
-      onClick={handleAddClip}
-      variant={"outline"}
-      className={cn("fixed bottom-10 right-10 rounded-full", className)}
-    >
-      <PencilLineIcon />
-    </Button>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          loading={status === "executing"}
+          size={"icon"}
+          onClick={handleAddClip}
+          variant={"outline"}
+          className={cn("fixed bottom-10 right-10 rounded-full", className)}
+        >
+          <PencilLineIcon />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Write</DialogTitle>
+          <DialogDescription>Write content to clipboard</DialogDescription>
+        </DialogHeader>
+        <Textarea placeholder="content goes here...."></Textarea>
+        <DialogFooter>
+          <Button type="submit">Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
