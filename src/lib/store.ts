@@ -6,10 +6,10 @@ interface ClipsStoreType {
   addClip: (clip: Tables<"clipboard">) => void;
   removeClip: (clip: Tables<"clipboard">) => void;
   removeAllClips: () => void;
-  updateClip: (clips: Tables<"clipboard">[]) => void;
+  initClips: (clips: Tables<"clipboard">[]) => void;
 }
 
-export const useClips = create<ClipsStoreType>((set) => ({
+export const useClipsStore = create<ClipsStoreType>((set) => ({
   clips: [],
   addClip: (clip) => set((state) => ({ clips: [clip, ...state.clips] })),
   removeAllClips: () => set({ clips: [] }),
@@ -17,5 +17,5 @@ export const useClips = create<ClipsStoreType>((set) => ({
     set((state) => ({
       clips: state.clips.filter((c) => c.id !== clip.id),
     })),
-  updateClip: (clips) => set({ clips }),
+  initClips: (clips) => set({ clips }),
 }));

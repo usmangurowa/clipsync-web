@@ -4,19 +4,19 @@ import { Button } from "./ui/button";
 import { PlusIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
-import { cn, getClipboardContent, safeCopyToClipboard } from "@/lib/utils";
-
+import { cn, getClipboardContent } from "@/lib/utils";
 import { createClient } from "@/supabase/client";
 import { toast } from "sonner";
-import { useClips } from "@/lib/store";
+import { useClipsStore } from "@/lib/store";
 import { Tables } from "@/supabase/db-types";
 
 const AddToClipboard = ({ className }: { className?: string }) => {
-  const { addClip: appendClip } = useClips();
+  const { addClip: appendClip } = useClipsStore();
   const { execute, status } = useAction(addClip, {
-    onSuccess: ({ data }) => {
+    onSuccess: async ({ data }) => {
       if (data && data.length) {
         appendClip(data[0]);
+        toast.success("Content added to clipboard");
       }
     },
     onError: ({ error }) => {
@@ -37,8 +37,8 @@ const AddToClipboard = ({ className }: { className?: string }) => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "clipboard" },
         (payload) => {
-          safeCopyToClipboard(payload.new.content);
-          toast.success("Copied to clipboard");
+          // safeCopyToClipboard(payload.new.content);
+          // toast.success("Copied to clipboard");
           if (payload.new) {
             appendClip(payload.new as Tables<"clipboard">);
           }

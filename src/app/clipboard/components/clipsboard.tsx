@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/drawer";
 import { useAction } from "next-safe-action/hooks";
 import { deleteClip } from "@/actions/clip";
+import { useClipsStore } from "@/lib/store";
 
 type ClipboardType = Tables<"clipboard">;
 
@@ -27,7 +28,8 @@ const ClipsBoard = () => {
   const [q] = useQueryState("q", { defaultValue: "" });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [clip, setClip] = React.useState<ClipboardType | null>(null);
-  const { data: clips, mutate } = useClips({ q });
+  useClips({ q });
+  const { clips } = useClipsStore();
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
     if (!value) {
@@ -55,8 +57,6 @@ const ClipsBoard = () => {
         open={isDrawerOpen}
         onOpenChange={handleOpenChange}
         clip={clip}
-        clips={clips || []}
-        mutate={mutate}
       />
     </>
   );
@@ -73,19 +73,17 @@ const ClipDrawerContent = ({
   open,
   onOpenChange,
   clip,
-  clips,
-  mutate,
 }: React.ComponentProps<typeof Drawer> & {
   clip: ClipboardType | null;
-  clips: ClipboardType[];
-  mutate: (data: ClipboardType[]) => void;
 }) => {
+  const { removeClip } = useClipsStore();
   const { execute, status } = useAction(deleteClip, {
     onSuccess: async () => {
+      if (clip) {
+        removeClip(clip);
+      }
       onOpenChange?.(false);
       toast.success("Clip deleted");
-      const newClips = clip ? clips.filter((c) => c.id !== clip.id) : clips;
-      mutate(newClips);
     },
   });
   if (!clip) {

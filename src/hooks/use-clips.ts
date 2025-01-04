@@ -1,4 +1,6 @@
+import { useClipsStore } from "@/lib/store";
 import { createClient } from "@/supabase/client";
+
 import useSWR from "swr";
 
 type QueryTypes = {
@@ -24,6 +26,8 @@ const getClips = async (query?: QueryTypes) => {
 };
 
 const useClips = (query?: QueryTypes) =>
-  useSWR(["clips", query], () => getClips(query));
+  useSWR(["clips", query], () => getClips(query), {
+    onSuccess: (data) => useClipsStore.getState().initClips(data),
+  });
 
 export { useClips };
