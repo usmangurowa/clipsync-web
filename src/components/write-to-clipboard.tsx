@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "./ui/button";
-import { PlusIcon } from "lucide-react";
+import { PencilLineIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
 import { cn, getClipboardContent } from "@/lib/utils";
@@ -63,7 +63,7 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
       variant={"outline"}
       className={cn("fixed bottom-10 right-10 rounded-full", className)}
     >
-      <PlusIcon />
+      <PencilLineIcon />
     </Button>
   );
 };
