@@ -26,7 +26,11 @@ const AddToClipboard = ({ className }: { className?: string }) => {
 
   const handleAddClip = async () => {
     const content = await getClipboardContent();
-    execute({ content });
+    if (content.trim().length) {
+      execute({ content });
+    } else {
+      toast.info("Clipboard is empty");
+    }
   };
 
   React.useEffect(() => {
