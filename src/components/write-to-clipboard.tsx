@@ -79,17 +79,14 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
           <PencilLineIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Write</DialogTitle>
           <DialogDescription>Write content to clipboard</DialogDescription>
         </DialogHeader>
         <Textarea placeholder="content goes here...."></Textarea>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button>Done</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

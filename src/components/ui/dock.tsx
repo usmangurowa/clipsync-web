@@ -116,6 +116,10 @@ const DockIcon = ({
 
   return (
     <motion.div
+      onClick={(e) => {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+      }}
       ref={ref}
       style={{ width }}
       className={cn(
