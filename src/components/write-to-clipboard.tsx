@@ -5,10 +5,9 @@ import { PencilLineIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { addClip } from "@/actions/clip";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/supabase/client";
+
 import { toast } from "sonner";
 import { useClipsStore } from "@/lib/store";
-import { Tables } from "@/supabase/db-types";
 
 import {
   Dialog,
@@ -43,28 +42,6 @@ const WriteToClipboard = ({ className }: { className?: string }) => {
       toast.info("Content is empty");
     }
   }, [content, execute]);
-
-  React.useEffect(() => {
-    const supabase = createClient();
-    const taskListener = supabase
-      .channel("clipboard")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "clipboard" },
-        (payload) => {
-          // safeCopyToClipboard(payload.new.content);
-          // toast.success("Copied to clipboard");
-          if (payload.new) {
-            appendClip(payload.new as Tables<"clipboard">);
-          }
-        },
-      )
-      .subscribe();
-
-    return () => {
-      taskListener.unsubscribe();
-    };
-  }, [appendClip]);
 
   return (
     <Dialog>
