@@ -49,7 +49,7 @@ const ClipsBoard = () => {
     const supabase = createClient();
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "v") {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "v") {
         navigator.clipboard.readText().then((content) => {
           if (content) {
             execute({ content });
