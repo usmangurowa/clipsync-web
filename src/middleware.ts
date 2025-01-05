@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
   if (!session && pathname.startsWith("/clipboard")) {
     const encodedSearchParams = `${pathname.substring(1)}${newUrl.search}`;
 
-    const url = new URL("/auth", request.url);
+    const url = new URL("/auth/sign-in", request.url);
 
     if (encodedSearchParams) {
       url.searchParams.append("return_to", encodedSearchParams);

@@ -10,7 +10,7 @@ const AuthErrorCode = () => {
       <p>
         There was an error with the authentication process. Please try again.
       </p>
-      <Link href={"/auth"}>Login</Link>
+      <Link href={"/auth/sign-in"}>Login</Link>
     </main>
   );
 };

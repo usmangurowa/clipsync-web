@@ -19,11 +19,7 @@ const NavBar = () => {
           {!isLoading && (
             <>
               <Button size={"sm"} asChild variant={"link"}>
-                {data ? (
-                  <Link href={"/clipboard"}>Clipboard</Link>
-                ) : (
-                  <Link href={"/auth"}>Login</Link>
-                )}
+                {data && <Link href={"/clipboard"}>Clipboard</Link>}
               </Button>
               <SwitchThemeButton />
             </>

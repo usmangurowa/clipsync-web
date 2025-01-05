@@ -127,5 +127,5 @@ export const update_profile = actionClient
 export const logout = actionClient.action(async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return redirect("/auth");
+  return redirect("/auth/sign-in");
 });
