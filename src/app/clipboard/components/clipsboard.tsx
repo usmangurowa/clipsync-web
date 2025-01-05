@@ -19,7 +19,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { useAction } from "next-safe-action/hooks";
-import { deleteClip } from "@/actions/clip";
+import { addClip, deleteClip } from "@/actions/clip";
 import { useClipsStore } from "@/lib/store";
 import { createClient } from "@/supabase/client";
 
@@ -30,13 +30,15 @@ const ClipsBoard = () => {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [clip, setClip] = React.useState<ClipboardType | null>(null);
   useClips({ q });
-  const { clips, addClip } = useClipsStore();
+  const { clips, addClip: appendClip } = useClipsStore();
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
     if (!value) {
       setClip(null);
     }
   }, []);
+
+  const { execute } = useAction(addClip);
 
   const handleTrigger = React.useCallback((clip: ClipboardType) => {
     setClip(clip);
@@ -45,6 +47,19 @@ const ClipsBoard = () => {
 
   React.useEffect(() => {
     const supabase = createClient();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === "v") {
+        navigator.clipboard.readText().then((content) => {
+          if (content) {
+            execute({ content });
+          }
+        });
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
     const taskListener = supabase
       .channel("clipboard")
       .on(
@@ -54,7 +69,7 @@ const ClipsBoard = () => {
           // safeCopyToClipboard(payload.new.content);
           // toast.success("Copied to clipboard");
           if (payload.new) {
-            addClip(payload.new as Tables<"clipboard">);
+            appendClip(payload.new as Tables<"clipboard">);
           }
         },
       )
@@ -62,8 +77,9 @@ const ClipsBoard = () => {
 
     return () => {
       taskListener.unsubscribe();
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [addClip]);
+  }, [appendClip, execute]);
 
   return (
     <>
