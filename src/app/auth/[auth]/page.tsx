@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Logo } from "@/components/brand";
 
-import { OTPAuth } from "../components/otp-auth";
+import { EmailAuth } from "../components/email-auth";
 import { GithubAuth } from "../components/github-auth";
 
 const AuthPage = ({ params }: PageProps) => {
@@ -33,7 +33,7 @@ const AuthPage = ({ params }: PageProps) => {
                 </p>
               </div>
 
-              <OTPAuth />
+              <EmailAuth />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

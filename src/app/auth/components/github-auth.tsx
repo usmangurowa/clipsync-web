@@ -1,11 +1,16 @@
 "use client";
 import { login_with_github } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
+import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
 import React from "react";
 
 const GithubAuth = () => {
-  const { execute, status } = useAction(login_with_github);
+  const { execute, status } = useAction(login_with_github, {
+    onSuccess: () => {
+      useAppConfigStore.getState().update({ lastLoginOption: "github" });
+    },
+  });
   return (
     <Button
       onClick={() => execute()}

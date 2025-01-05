@@ -4,8 +4,10 @@ import Link from "next/link";
 
 import { Logo } from "@/components/brand";
 
-import { OTPAuth } from "./components/otp-auth";
+import { EmailAuth } from "./components/email-auth";
 import { GithubAuth } from "./components/github-auth";
+import { EmailPasswordAuth } from "./components/email-password-auth";
+import { Separator } from "@/components/ui/separator";
 
 export default function AuthPage() {
   return (
@@ -29,8 +31,7 @@ export default function AuthPage() {
                 </h1>
                 <p className="text-sm text-muted-foreground"></p>
               </div>
-
-              <OTPAuth />
+              <EmailPasswordAuth />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -38,11 +39,12 @@ export default function AuthPage() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
-                    or continue with
+                    More options
                   </span>
                 </div>
               </div>
-
+              <EmailAuth />
+              <Separator />
               <GithubAuth />
 
               <p className="px-8 text-center text-sm text-muted-foreground">

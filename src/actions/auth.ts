@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@/supabase/server";
-import { email_schema, profile_schema } from "@/schema";
+import { auth_schema, email_schema, profile_schema } from "@/schema";
 import { redirect } from "next/navigation";
 
 export const getSession = async () => {
@@ -33,7 +33,7 @@ export const login_with_github = actionClient.action(async () => {
   }
 });
 
-export const authenticate = actionClient
+export const login_with_email = actionClient
   .schema(email_schema)
   .action(async ({ parsedInput: { email } }) => {
     const supabase = await createClient();
@@ -49,24 +49,36 @@ export const authenticate = actionClient
     return redirect("/auth/verify?email=" + email);
   });
 
-export const login_with_email = actionClient
-  .schema(email_schema)
-  .action(async ({ parsedInput: { email } }) => {
-    try {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { shouldCreateUser: true },
-      });
+export const login_with_email_and_password = actionClient
+  .schema(auth_schema)
+  .action(async ({ parsedInput: { email, password } }) => {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      return data;
-    } catch (error) {
+    if (error) {
       throw error;
     }
+
+    return redirect("/clipboard");
+  });
+
+export const register_with_email_and_password = actionClient
+  .schema(auth_schema)
+  .action(async ({ parsedInput: { email, password } }) => {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return redirect("/auth/verify?email=" + email);
   });
 
 export const verify_otp = actionClient

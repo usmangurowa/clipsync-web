@@ -1,12 +1,16 @@
 "use client";
-import { authenticate } from "@/actions/auth";
+import { login_with_email } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
 import React from "react";
 
-const OTPAuth = () => {
-  const { execute, status } = useAction(authenticate, {
+const EmailAuth = () => {
+  const { execute, status } = useAction(login_with_email, {
+    onSuccess: () => {
+      useAppConfigStore.getState().update({ lastLoginOption: "email" });
+    },
     onError: (error) => console.log(error),
   });
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,4 +43,4 @@ const OTPAuth = () => {
   );
 };
 
-export { OTPAuth };
+export { EmailAuth };
