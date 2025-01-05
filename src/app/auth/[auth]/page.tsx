@@ -1,15 +1,16 @@
-"use client";
-
 import Link from "next/link";
 
 import { Logo } from "@/components/brand";
 
-import { EmailAuth } from "./components/email-auth";
-import { GithubAuth } from "./components/github-auth";
-import { EmailPasswordAuth } from "./components/email-password-auth";
+import { EmailAuth } from "../components/email-auth";
+import { GithubAuth } from "../components/github-auth";
+import { EmailPasswordAuth } from "../components/email-password-auth";
 import { Separator } from "@/components/ui/separator";
+import { use } from "react";
+import { Button } from "@/components/ui/button";
 
-export default function AuthPage() {
+export default function AuthPage(props: PageProps) {
+  const { auth } = use(props.params) as { auth: "sign-in" | "sign-up" };
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
       <div className="hidden bg-card md:block">
@@ -29,23 +30,27 @@ export default function AuthPage() {
                 <h1 className="text-2xl font-semibold tracking-tight">
                   Clip Sync
                 </h1>
-                <p className="text-sm text-muted-foreground"></p>
+                <p className="text-sm text-muted-foreground">
+                  {auth === "sign-in"
+                    ? "Sign in to your account"
+                    : "Create an account"}
+                </p>
               </div>
-              <EmailPasswordAuth />
+              <EmailPasswordAuth type={auth} />
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    More options
-                  </span>
-                </div>
-              </div>
+              <TextSeparator text={"more options"} />
+
               <EmailAuth />
               <Separator />
               <GithubAuth />
+              <TextSeparator text={"or"} />
+              <Button asChild className="w-full" variant={"link"}>
+                <Link
+                  href={`/auth/${auth === "sign-in" ? "sign-up" : "sign-in"}`}
+                >
+                  {auth === "sign-in" ? "Sign up" : "Sign in"}
+                </Link>
+              </Button>
 
               <p className="px-8 text-center text-sm text-muted-foreground">
                 By clicking continue, you agree to our{" "}
@@ -70,3 +75,16 @@ export default function AuthPage() {
     </div>
   );
 }
+
+const TextSeparator = ({ text = null }: { text?: string | null }) => (
+  <div className="relative">
+    <div className="absolute inset-0 flex items-center">
+      <span className="w-full border-t" />
+    </div>
+    <div className="relative flex justify-center text-xs uppercase">
+      {text && (
+        <span className="bg-background px-2 text-muted-foreground">{text}</span>
+      )}
+    </div>
+  </div>
+);

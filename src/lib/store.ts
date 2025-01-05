@@ -1,5 +1,6 @@
 import { Tables } from "@/supabase/db-types";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface ClipsStoreType {
   clips: Tables<"clipboard">[];
@@ -25,3 +26,20 @@ export const useClipsStore = create<ClipsStoreType>((set) => ({
     })),
   initClips: (clips) => set({ clips }),
 }));
+
+interface AppConfigStoreType {
+  lastLoginOption: "email" | "email-password" | "github";
+  update: (config: Partial<AppConfigStoreType>) => void;
+}
+
+export const useAppConfigStore = create(
+  persist<AppConfigStoreType>(
+    (set) => ({
+      lastLoginOption: "email-password",
+      update: (config) => set(config),
+    }),
+    {
+      name: "app-config-store",
+    },
+  ),
+);

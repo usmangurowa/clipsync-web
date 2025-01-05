@@ -7,7 +7,7 @@ import React from "react";
 const GetStarted = () => {
   const { data, isLoading } = useSession();
   return (
-    <Link href={isLoading ? "#" : data ? "/clipboard" : "/auth"}>
+    <Link href={isLoading ? "#" : data ? "/clipboard" : "/auth/sign-in"}>
       <ShimmerButton className="shadow-2xl dark:text-white">
         Get Started
       </ShimmerButton>
