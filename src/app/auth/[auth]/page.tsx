@@ -1,13 +1,14 @@
-"use client";
-
+import React, { use } from "react";
 import Link from "next/link";
 
 import { Logo } from "@/components/brand";
 
-import { OTPAuth } from "./components/otp-auth";
-import { GithubAuth } from "./components/github-auth";
+import { OTPAuth } from "../components/otp-auth";
+import { GithubAuth } from "../components/github-auth";
 
-export default function AuthPage() {
+const AuthPage = ({ params }: PageProps) => {
+  const { auth } = use(params);
+
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
       <div className="hidden bg-card md:block">
@@ -27,7 +28,9 @@ export default function AuthPage() {
                 <h1 className="text-2xl font-semibold tracking-tight">
                   Clip Sync
                 </h1>
-                <p className="text-sm text-muted-foreground"></p>
+                <p className="text-sm text-muted-foreground">
+                  {auth === "login" ? "Welcome Back" : "Create account."}
+                </p>
               </div>
 
               <OTPAuth />
@@ -67,4 +70,6 @@ export default function AuthPage() {
       </div>
     </div>
   );
-}
+};
+
+export default AuthPage;

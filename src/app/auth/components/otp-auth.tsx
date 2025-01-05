@@ -39,4 +39,4 @@ const OTPAuth = () => {
   );
 };
 
-export default OTPAuth;
+export { OTPAuth };
