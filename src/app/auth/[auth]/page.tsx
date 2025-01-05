@@ -44,7 +44,7 @@ export default function AuthPage(props: PageProps) {
               <Separator />
               <GithubAuth />
               <TextSeparator text={"or"} />
-              <Button asChild className="w-full">
+              <Button asChild className="w-full" variant={"link"}>
                 <Link
                   href={`/auth/${auth === "sign-in" ? "sign-up" : "sign-in"}`}
                 >
