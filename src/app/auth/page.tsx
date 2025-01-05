@@ -1,29 +1,17 @@
 "use client";
 
 import Link from "next/link";
-// import Image from 'next/image'
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Logo } from "@/components/brand";
 
 import { useAction } from "next-safe-action/hooks";
-import { authenticate, login_with_github } from "@/actions/auth";
+import { login_with_github } from "@/actions/auth";
+import OTPAuth from "./components/otp-auth";
 
 export default function AuthPage() {
   const { execute: executeGithub } = useAction(login_with_github);
 
-  const { execute, status } = useAction(authenticate, {
-    onError: (error) => console.log(error),
-  });
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const email = (
-      event.currentTarget.elements.namedItem("email") as HTMLInputElement
-    ).value;
-
-    execute({ email });
-  };
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
       <div className="hidden bg-card md:block">
@@ -48,22 +36,7 @@ export default function AuthPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Input
-                    id="email"
-                    placeholder="name@example.com"
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                  />
-                </div>
-
-                <Button disabled={status === "executing"} className="w-full">
-                  Continue
-                </Button>
-              </form>
+              <OTPAuth />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
