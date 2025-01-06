@@ -62,7 +62,11 @@ export default function AuthPage(props: PageProps) {
                 </>
               )}
 
-              <Accordion type="single" collapsible>
+              <Accordion
+                type="single"
+                collapsible
+                defaultValue={lastLoginOption === "" ? "item-1" : ""}
+              >
                 <AccordionItem value="item-1" className="border-none">
                   <AccordionTrigger
                     className="justify-center"
