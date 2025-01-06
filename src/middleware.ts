@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     const url = new URL("/auth/sign-in", request.url);
 
     if (encodedSearchParams) {
-      url.searchParams.append("return_to", encodedSearchParams);
+      url.searchParams.append("next", encodedSearchParams);
     }
 
     return NextResponse.redirect(url);

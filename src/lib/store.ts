@@ -28,7 +28,7 @@ export const useClipsStore = create<ClipsStoreType>((set) => ({
 }));
 
 interface AppConfigStoreType {
-  lastLoginOption: "email" | "email-password" | "github" | "";
+  lastLoginOption: "email" | "email-password" | "github" | "google" | "";
   update: (config: Partial<AppConfigStoreType>) => void;
 }
 

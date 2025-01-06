@@ -32,6 +32,23 @@ export const login_with_github = actionClient.action(async () => {
     redirect(data.url);
   }
 });
+export const login_with_google = actionClient.action(async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
+});
 
 export const login_with_email = actionClient
   .schema(email_schema)

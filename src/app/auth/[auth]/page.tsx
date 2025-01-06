@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ChevronDown } from "lucide-react";
+import { GoogleAuth } from "../components/google-auth";
 
 export default function AuthPage(props: PageProps) {
   const { auth } = use(props.params) as { auth: "sign-in" | "sign-up" };
@@ -55,6 +56,7 @@ export default function AuthPage(props: PageProps) {
                 <>
                   {lastLoginOption === "email" && <EmailAuth />}
                   {lastLoginOption === "github" && <GithubAuth />}
+                  {lastLoginOption === "google" && <GoogleAuth />}
                   {(lastLoginOption === "email-password" ||
                     lastLoginOption === "") && (
                     <EmailPasswordAuth type={auth} />
@@ -85,6 +87,7 @@ export default function AuthPage(props: PageProps) {
                   <AccordionContent className="space-y-5">
                     {auth === "sign-up" ? (
                       <>
+                        <GoogleAuth />
                         <GithubAuth />
                         <TextSeparator text={"Email only"} />
                         <EmailAuth />
@@ -93,6 +96,7 @@ export default function AuthPage(props: PageProps) {
                       <>
                         {lastLoginOption === "email" && (
                           <>
+                            <GoogleAuth />
                             <GithubAuth />
                             <TextSeparator text={"Email and password"} />
                             <EmailPasswordAuth type={auth} />
@@ -100,6 +104,7 @@ export default function AuthPage(props: PageProps) {
                         )}
                         {lastLoginOption === "github" && (
                           <>
+                            <GoogleAuth />
                             <TextSeparator text={"Email and password"} />
                             <EmailPasswordAuth type={auth} />
                             <TextSeparator text={"Email only"} />
@@ -108,6 +113,14 @@ export default function AuthPage(props: PageProps) {
                         )}
                         {(lastLoginOption === "email-password" ||
                           lastLoginOption === "") && (
+                          <>
+                            <GoogleAuth />
+                            <GithubAuth />
+                            <TextSeparator text={"Email only"} />
+                            <EmailAuth />
+                          </>
+                        )}
+                        {lastLoginOption === "google" && (
                           <>
                             <GithubAuth />
                             <TextSeparator text={"Email only"} />
