@@ -28,14 +28,14 @@ export const useClipsStore = create<ClipsStoreType>((set) => ({
 }));
 
 interface AppConfigStoreType {
-  lastLoginOption: "email" | "email-password" | "github";
+  lastLoginOption: "email" | "email-password" | "github" | "";
   update: (config: Partial<AppConfigStoreType>) => void;
 }
 
 export const useAppConfigStore = create(
   persist<AppConfigStoreType>(
     (set) => ({
-      lastLoginOption: "email",
+      lastLoginOption: "",
       update: (config) => set(config),
     }),
     {
