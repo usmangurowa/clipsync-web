@@ -7,6 +7,7 @@ import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 import { GetStarted } from "@/app/(landing)/components/get-started";
 import { NavBar } from "@/app/(landing)/components/nav-bar";
+import { Footer } from "@/app/(landing)/components/footer";
 
 const Home = () => {
   return (
@@ -34,6 +35,7 @@ const Home = () => {
           imageSrc="/clipboard-dark.png"
         />
       </div>
+      <Footer />
     </>
   );
 };
