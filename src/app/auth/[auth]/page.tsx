@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 import { Logo } from "@/components/brand";
@@ -5,12 +6,22 @@ import { Logo } from "@/components/brand";
 import { EmailAuth } from "../components/email-auth";
 import { GithubAuth } from "../components/github-auth";
 import { EmailPasswordAuth } from "../components/email-password-auth";
-import { Separator } from "@/components/ui/separator";
+
 import { use } from "react";
 import { Button } from "@/components/ui/button";
+import { useAppConfigStore } from "@/lib/store";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ChevronDown } from "lucide-react";
 
 export default function AuthPage(props: PageProps) {
   const { auth } = use(props.params) as { auth: "sign-in" | "sign-up" };
+  const { lastLoginOption } = useAppConfigStore();
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
       <div className="hidden bg-card md:block">
@@ -36,14 +47,73 @@ export default function AuthPage(props: PageProps) {
                     : "Create an account"}
                 </p>
               </div>
-              <EmailPasswordAuth type={auth} />
+              {auth === "sign-up" ? (
+                <>
+                  <EmailPasswordAuth type={auth} />
+                </>
+              ) : (
+                <>
+                  {lastLoginOption === "email" && <EmailAuth />}
+                  {lastLoginOption === "github" && <GithubAuth />}
+                  {lastLoginOption === "email-password" && (
+                    <EmailPasswordAuth type={auth} />
+                  )}
+                </>
+              )}
 
-              <TextSeparator text={"more options"} />
+              <Accordion type="single" collapsible>
+                <AccordionItem value="item-1" className="border-none">
+                  <AccordionTrigger
+                    className="justify-center"
+                    indicator={false}
+                  >
+                    <div className="relative w-full">
+                      <div className="absolute inset-0 flex w-full items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <span className="relative mx-auto flex w-fit justify-center gap-x-2 bg-background px-2 text-center text-xs uppercase text-muted-foreground">
+                        More options{" "}
+                        <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-5">
+                    {auth === "sign-up" ? (
+                      <>
+                        <GithubAuth />
+                        <TextSeparator text={"Email only"} />
+                        <EmailAuth />
+                      </>
+                    ) : (
+                      <>
+                        {lastLoginOption === "email" && (
+                          <>
+                            <GithubAuth />
+                            <TextSeparator text={"Email and password"} />
+                            <EmailPasswordAuth type={auth} />
+                          </>
+                        )}
+                        {lastLoginOption === "github" && (
+                          <>
+                            <TextSeparator text={"Email and password"} />
+                            <EmailPasswordAuth type={auth} />
+                            <TextSeparator text={"Email only"} />
+                            <EmailAuth />
+                          </>
+                        )}
+                        {lastLoginOption === "email-password" && (
+                          <>
+                            <GithubAuth />
+                            <TextSeparator text={"Email only"} />
+                            <EmailAuth />
+                          </>
+                        )}
+                      </>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
-              <EmailAuth />
-              <Separator />
-              <GithubAuth />
-              <TextSeparator text={"or"} />
               <Button asChild className="w-full" variant={"link"}>
                 <Link
                   href={`/auth/${auth === "sign-in" ? "sign-up" : "sign-in"}`}

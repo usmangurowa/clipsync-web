@@ -35,7 +35,7 @@ interface AppConfigStoreType {
 export const useAppConfigStore = create(
   persist<AppConfigStoreType>(
     (set) => ({
-      lastLoginOption: "email-password",
+      lastLoginOption: "email",
       update: (config) => set(config),
     }),
     {

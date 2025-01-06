@@ -10,6 +10,7 @@
     "db:generate": "npx supabase gen types --lang=typescript --project-id mquvgyqvmblcaogecqqn --schema public > src/supabase/db-types.ts"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-scroll-area": "^1.2.1",
