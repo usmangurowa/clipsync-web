@@ -106,7 +106,8 @@ export default function AuthPage(props: PageProps) {
                             <EmailAuth />
                           </>
                         )}
-                        {lastLoginOption === "email-password" && (
+                        {(lastLoginOption === "email-password" ||
+                          lastLoginOption === "") && (
                           <>
                             <GithubAuth />
                             <TextSeparator text={"Email only"} />
