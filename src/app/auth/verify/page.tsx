@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/input-otp";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function VerifyPage(props: PageProps) {
   const { execute, status } = useAction(verify_otp, {
@@ -26,6 +27,8 @@ export default function VerifyPage(props: PageProps) {
   const [otp, setOtp] = React.useState<string>("");
 
   const { email } = React.use(props.searchParams) as { email: string };
+
+  const router = useRouter();
 
   const handleVerify = () => {
     execute({ email, otp });
@@ -85,9 +88,13 @@ export default function VerifyPage(props: PageProps) {
                 </Button>
               </div>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
-                Go back
-              </p>
+              <Button
+                className="w-full"
+                variant={"link"}
+                onClick={() => router.back()}
+              >
+                Go Back
+              </Button>
             </div>
           </div>
         </div>
