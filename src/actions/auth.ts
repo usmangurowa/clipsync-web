@@ -129,3 +129,18 @@ export const logout = actionClient.action(async () => {
   await supabase.auth.signOut();
   return redirect("/auth/sign-in");
 });
+
+export const forgot_password = actionClient
+  .schema(email_schema)
+  .action(async ({ parsedInput: { email } }) => {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/reset-password`,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return redirect("/auth/reset-password");
+  });
