@@ -94,7 +94,7 @@ const ClipsBoard = () => {
           />
         ))}
         {isLoading &&
-          Array.from({ length: 10 }).map((_, index) => (
+          Array.from({ length: 20 }).map((_, index) => (
             <Skeleton
               key={index}
               className="mb-5 h-40 w-full cursor-pointer rounded-lg border"
