@@ -21,11 +21,6 @@ const EmailPasswordAuth = ({
       ? login_with_email_and_password
       : register_with_email_and_password,
     {
-      onSuccess: () => {
-        useAppConfigStore
-          .getState()
-          .update({ lastLoginOption: "email-password" });
-      },
       onError: ({ error }) => {
         const { serverError, validationErrors } = error;
         const errors = serverError || validationErrors?.formErrors[0];
@@ -43,7 +38,7 @@ const EmailPasswordAuth = ({
     const password = (
       event.currentTarget.elements.namedItem("password") as HTMLInputElement
     ).value;
-
+    useAppConfigStore.getState().update({ lastLoginOption: "email-password" });
     execute({ email, password });
   };
 
