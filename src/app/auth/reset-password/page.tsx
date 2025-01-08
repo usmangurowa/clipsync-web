@@ -8,10 +8,15 @@ import { reset_password } from "@/actions/auth";
 import React from "react";
 
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 export default function ResetPassword() {
   const { execute, status } = useAction(reset_password, {
-    onError: (error) => console.log(error),
+    onError: ({ error }) => {
+      const { serverError, validationErrors } = error;
+      const errors = serverError || validationErrors?.formErrors[0];
+      toast.error(errors);
+    },
   });
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +60,7 @@ export default function ResetPassword() {
                   name="password"
                 />
                 <Input
-                  id="password"
+                  id="confirm_password"
                   placeholder="confirm password"
                   type="password"
                   autoCapitalize="none"
