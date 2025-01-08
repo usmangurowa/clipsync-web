@@ -9,9 +9,6 @@ import { toast } from "sonner";
 
 const EmailAuth = () => {
   const { execute, status } = useAction(login_with_email, {
-    onSuccess: () => {
-      useAppConfigStore.getState().update({ lastLoginOption: "email" });
-    },
     onError: ({ error }) => {
       const { serverError, validationErrors } = error;
       const errors = serverError || validationErrors?.formErrors[0];
@@ -24,7 +21,7 @@ const EmailAuth = () => {
     const email = (
       event.currentTarget.elements.namedItem("email") as HTMLInputElement
     ).value;
-
+    useAppConfigStore.getState().update({ lastLoginOption: "email" });
     execute({ email });
   };
 
