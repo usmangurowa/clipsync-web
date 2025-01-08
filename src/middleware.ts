@@ -17,6 +17,10 @@ export async function middleware(request: NextRequest) {
 
   const session = data?.session || null;
 
+  if (session && pathname === "/auth/reset-password") {
+    return NextResponse.next();
+  }
+
   if (session && pathname.startsWith("/auth")) {
     return NextResponse.redirect(newUrl.origin);
   }

@@ -5,13 +5,15 @@ import { Input } from "@/components/ui/input";
 import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
 import React from "react";
+import { toast } from "sonner";
 
 const EmailAuth = () => {
   const { execute, status } = useAction(login_with_email, {
-    onSuccess: () => {
-      useAppConfigStore.getState().update({ lastLoginOption: "email" });
+    onError: ({ error }) => {
+      const { serverError, validationErrors } = error;
+      const errors = serverError || validationErrors?.formErrors[0];
+      toast.error(errors);
     },
-    onError: (error) => console.log(error),
   });
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,7 +21,7 @@ const EmailAuth = () => {
     const email = (
       event.currentTarget.elements.namedItem("email") as HTMLInputElement
     ).value;
-
+    useAppConfigStore.getState().update({ lastLoginOption: "email" });
     execute({ email });
   };
 

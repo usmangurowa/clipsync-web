@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
+import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 const EmailPasswordAuth = ({
   type = "sign-in",
@@ -19,12 +21,11 @@ const EmailPasswordAuth = ({
       ? login_with_email_and_password
       : register_with_email_and_password,
     {
-      onSuccess: () => {
-        useAppConfigStore
-          .getState()
-          .update({ lastLoginOption: "email-password" });
+      onError: ({ error }) => {
+        const { serverError, validationErrors } = error;
+        const errors = serverError || validationErrors?.formErrors[0];
+        toast.error(errors);
       },
-      onError: (error) => console.log(error),
     },
   );
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +38,7 @@ const EmailPasswordAuth = ({
     const password = (
       event.currentTarget.elements.namedItem("password") as HTMLInputElement
     ).value;
-
+    useAppConfigStore.getState().update({ lastLoginOption: "email-password" });
     execute({ email, password });
   };
 
@@ -60,6 +61,11 @@ const EmailPasswordAuth = ({
           autoComplete="new-password"
           autoCorrect="off"
         />
+        <div className="flex justify-end">
+          <Button variant={"link"} className="!h-fit px-0">
+            <Link href="/auth/forgot-password">Forgot password?</Link>
+          </Button>
+        </div>
       </div>
 
       <Button disabled={status === "executing"} className="w-full">

@@ -22,6 +22,7 @@ import { useAction } from "next-safe-action/hooks";
 import { addClip, deleteClip } from "@/actions/clip";
 import { useClipsStore } from "@/lib/store";
 import { createClient } from "@/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ClipboardType = Tables<"clipboard">;
 
@@ -29,7 +30,7 @@ const ClipsBoard = () => {
   const [q] = useQueryState("q", { defaultValue: "" });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [clip, setClip] = React.useState<ClipboardType | null>(null);
-  useClips({ q });
+  const { isLoading } = useClips({ q });
   const { clips, addClip: appendClip } = useClipsStore();
   const handleOpenChange = React.useCallback((value: boolean) => {
     setIsDrawerOpen(value);
@@ -92,6 +93,13 @@ const ClipsBoard = () => {
             onTrigger={() => handleTrigger(clip)}
           />
         ))}
+        {isLoading &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="mb-5 h-40 w-full cursor-pointer rounded-lg border"
+            />
+          ))}
       </div>
       {clips.length === 0 && (
         <div className="flex h-full w-full flex-col items-center justify-center space-y-5 p-5">

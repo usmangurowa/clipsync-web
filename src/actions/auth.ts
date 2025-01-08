@@ -2,7 +2,12 @@
 import { z } from "zod";
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@/supabase/server";
-import { auth_schema, email_schema, profile_schema } from "@/schema";
+import {
+  auth_schema,
+  email_schema,
+  profile_schema,
+  reset_password_schema,
+} from "@/schema";
 import { redirect } from "next/navigation";
 
 export const getSession = async () => {
@@ -129,3 +134,33 @@ export const logout = actionClient.action(async () => {
   await supabase.auth.signOut();
   return redirect("/auth/sign-in");
 });
+
+export const forgot_password = actionClient
+  .schema(email_schema)
+  .action(async ({ parsedInput: { email } }) => {
+    const supabase = await createClient();
+    const { error, data } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/reset-password`,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  });
+
+export const reset_password = actionClient
+  .schema(reset_password_schema)
+  .action(async ({ parsedInput }) => {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.updateUser({
+      password: parsedInput.password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return redirect("/");
+  });
