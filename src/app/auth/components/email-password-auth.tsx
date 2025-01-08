@@ -9,6 +9,7 @@ import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 const EmailPasswordAuth = ({
   type = "sign-in",
@@ -25,7 +26,11 @@ const EmailPasswordAuth = ({
           .getState()
           .update({ lastLoginOption: "email-password" });
       },
-      onError: (error) => console.log(error),
+      onError: ({ error }) => {
+        const { serverError, validationErrors } = error;
+        const errors = serverError || validationErrors?.formErrors[0];
+        toast.error(errors);
+      },
     },
   );
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
