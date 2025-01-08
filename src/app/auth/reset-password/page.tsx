@@ -3,25 +3,30 @@
 import { Button } from "@/components/ui/button";
 
 import { useAction } from "next-safe-action/hooks";
-import { forgot_password } from "@/actions/auth";
+import { reset_password } from "@/actions/auth";
 
 import React from "react";
 
 import { Input } from "@/components/ui/input";
 
 export default function ResetPassword() {
-  const { execute, status } = useAction(forgot_password, {
+  const { execute, status } = useAction(reset_password, {
     onError: (error) => console.log(error),
   });
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const email = (
-      event.currentTarget.elements.namedItem("email") as HTMLInputElement
+    const password = (
+      event.currentTarget.elements.namedItem("password") as HTMLInputElement
+    ).value;
+    const confirm_password = (
+      event.currentTarget.elements.namedItem(
+        "confirm_password",
+      ) as HTMLInputElement
     ).value;
 
-    execute({ email });
+    execute({ password, confirm_password });
   };
 
   return (
@@ -47,6 +52,7 @@ export default function ResetPassword() {
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
+                  name="password"
                 />
                 <Input
                   id="password"
@@ -55,6 +61,7 @@ export default function ResetPassword() {
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
+                  name="confirm_password"
                 />
               </div>
 
