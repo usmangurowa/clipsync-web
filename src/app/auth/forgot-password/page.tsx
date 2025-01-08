@@ -8,10 +8,15 @@ import { forgot_password } from "@/actions/auth";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 export default function VerifyPage() {
   const { execute, status } = useAction(forgot_password, {
-    onError: (error) => console.log(error),
+    onError: ({ error }) => {
+      const { serverError, validationErrors } = error;
+      const errors = serverError || validationErrors?.formErrors[0];
+      toast.error(errors);
+    },
   });
 
   const router = useRouter();
