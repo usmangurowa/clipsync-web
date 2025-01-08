@@ -2,7 +2,12 @@
 import { z } from "zod";
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@/supabase/server";
-import { auth_schema, email_schema, profile_schema } from "@/schema";
+import {
+  auth_schema,
+  email_schema,
+  profile_schema,
+  reset_password_schema,
+} from "@/schema";
 import { redirect } from "next/navigation";
 
 export const getSession = async () => {
@@ -143,4 +148,19 @@ export const forgot_password = actionClient
     }
 
     return redirect("/auth/reset-password");
+  });
+
+export const reset_password = actionClient
+  .schema(reset_password_schema)
+  .action(async ({ parsedInput }) => {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.updateUser({
+      password: parsedInput.password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return redirect("/auth/sign-in?lastLoginOption=email-password");
   });

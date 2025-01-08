@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppConfigStore } from "@/lib/store";
 import { useAction } from "next-safe-action/hooks";
+import Link from "next/link";
 import React from "react";
 
 const EmailPasswordAuth = ({
@@ -60,6 +61,11 @@ const EmailPasswordAuth = ({
           autoComplete="new-password"
           autoCorrect="off"
         />
+        <div className="flex justify-end">
+          <Button variant={"link"} className="!h-fit px-0">
+            <Link href="/auth/forgot-password">Forgot password?</Link>
+          </Button>
+        </div>
       </div>
 
       <Button disabled={status === "executing"} className="w-full">
