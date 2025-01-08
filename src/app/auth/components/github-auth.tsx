@@ -8,18 +8,20 @@ import { toast } from "sonner";
 
 const GithubAuth = () => {
   const { execute, status } = useAction(login_with_github, {
-    onSuccess: () => {
-      useAppConfigStore.getState().update({ lastLoginOption: "github" });
-    },
     onError: ({ error }) => {
       const { serverError, validationErrors } = error;
       const errors = serverError || validationErrors?.formErrors[0];
       toast.error(errors);
     },
   });
+
+  const handleExecute = () => {
+    useAppConfigStore.getState().update({ lastLoginOption: "github" });
+    execute();
+  };
   return (
     <Button
-      onClick={() => execute()}
+      onClick={handleExecute}
       variant="outline"
       className="w-full"
       type="button"
